@@ -2,15 +2,17 @@
   "name": "hanyunbin.github.io",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://hanyunbin.github.io/hanyunbin.github.io",
+  "homepage": "https://hanyunbin.github.io",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "firebase": "^12.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-scripts": "5.0.1",
+    "tone": "^15.1.22",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
