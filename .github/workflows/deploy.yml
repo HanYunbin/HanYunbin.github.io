@@ -16,6 +16,8 @@ jobs:
       # 1. 저장소 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v3 # 저장소 코드를 워크플로우 환경으로 가져옴
+        with:
+          path: .
 
       # 2. Node.js 환경 설정
       - name: Setup Node.js
