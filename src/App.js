@@ -12,10 +12,10 @@ import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, updateDoc, q
 import * as Tone from 'tone';
 
 
-// Firebase 설정 (전역 변수로 제공됨)
-const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+// Firebase 설정 (전역 변수로 제공됨) - GitHub Pages 배포를 위해 직접 값 설정
+const firebaseConfig = {}; // 여기에 실제 Firebase 설정 객체를 넣을 수 있지만, 지금은 빈 객체로 둡니다.
+const appId = 'default-app-id'; // 실제 앱 ID를 넣을 수 있지만, 지금은 기본값으로 둡니다.
+const initialAuthToken = null; // 실제 인증 토큰을 넣을 수 있지만, 지금은 null로 둡니다.
 
 // Firebase 초기화
 const app = initializeApp(firebaseConfig);
