@@ -6,24 +6,27 @@ import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, updateDoc, q
 // Tone.js CDN 로드
 // 이 스크립트는 React 컴포넌트 내부가 아닌 HTML 파일의 <head>에 위치해야 하지만,
 // 개발 환경에서 편의상 여기에 포함하여 Tone 객체를 사용할 수 있도록 합니다.
-// 실제 배포 시에는 index.html <head>에 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script> 추가를 권장합니다.
+// 실제 배포 시에는 index.html <head>에 <script src="[https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js](https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js)"></script> 추가를 권장합니다.
 // Tone.js는 전역 Tone 객체를 노출합니다.
 // eslint-disable-next-line
 import * as Tone from 'tone';
 
 
 // Firebase 설정 (전역 변수로 제공됨) - GitHub Pages 배포를 위해 직접 값 설정
-// Firebase 초기화 오류를 해결하기 위해 더미 projectId를 추가합니다.
+// 실제 Firebase 프로젝트를 사용하려면 아래 YOUR_... 부분에 실제 값을 입력해야 합니다.
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY", // 실제 키가 필요하면 여기에 입력하세요.
+  apiKey: "YOUR_API_KEY",
   authDomain: "your-project-id.firebaseapp.com",
-  projectId: "your-project-id", // Firebase 초기화 오류 해결을 위한 더미 projectId
+  projectId: "your-project-id",
   storageBucket: "your-project-id.appspot.com",
   messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
   appId: "YOUR_APP_ID"
 };
-const appId = 'default-app-id'; // 실제 앱 ID를 넣을 수 있지만, 지금은 기본값으로 둡니다.
-const initialAuthToken = null; // 실제 인증 토큰을 넣을 수 있지만, 지금은 null로 둡니다.
+// Canvas 환경에서 제공되는 __app_id가 없을 경우를 대비한 기본값
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+// Canvas 환경에서 제공되는 __initial_auth_token이 없을 경우를 대비한 기본값
+const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
 
 // Firebase 초기화
 const app = initializeApp(firebaseConfig);
@@ -171,13 +174,11 @@ const PixelAvatar = ({ hairId, outfitId, weaponId }) => {
 
 // 아바타 꾸미기 화면 컴포넌트
 const AvatarCustomizationScreen = ({ character, updateCharacterPart, onClose }) => {
-  // 아바타 뼈대 이미지를 더 이상 사용하지 않으므로 avatarBaseImageUrl 변수 제거
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-4 sm:p-8 font-inter flex flex-col items-center justify-center">
       <div className="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700 max-w-lg w-full text-center">
         <h2 className="text-3xl font-bold mb-6 text-pink-400 flex items-center justify-center">
-          <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
           아바타 꾸미기
         </h2>
 
@@ -185,7 +186,6 @@ const AvatarCustomizationScreen = ({ character, updateCharacterPart, onClose }) 
         <div className="flex justify-center mb-8">
           <div className={`w-32 h-32 flex items-center justify-center border-4 border-gray-600 overflow-hidden`}>
             <PixelAvatar
-              // baseImageSrc prop 제거
               hairId={character.hairId}
               outfitId={character.outfitId}
               weaponId={character.weaponId}
@@ -317,7 +317,7 @@ const ItemsScreen = ({ character, onBack, sellItem, equipItem, unequipItem }) =>
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-4 sm:p-8 font-inter flex flex-col items-center">
       <div className="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700 max-w-4xl w-full text-center mt-8">
         <h2 className="text-3xl font-bold mb-6 text-orange-400 flex items-center justify-center">
-          <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-4-2h8m-4 2v4"></path></svg>
+          <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-4-2h8m-4 2v4"></path></svg>
           아이템
         </h2>
 
@@ -487,7 +487,7 @@ const ShopScreen = ({ character, onBack, buyItem }) => { // character와 buyItem
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-4 sm:p-8 font-inter flex flex-col items-center">
       <div className="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700 max-w-4xl w-full text-center mt-8">
         <h2 className="text-3xl font-bold mb-6 text-yellow-400 flex items-center justify-center">
-          <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
           상점가
         </h2>
 
@@ -572,7 +572,7 @@ const GuildScreen = ({ onBack }) => (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-4 sm:p-8 font-inter flex flex-col items-center">
     <div className="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700 max-w-2xl w-full text-center mt-8">
       <h2 className="text-3xl font-bold mb-6 text-blue-400 flex items-center justify-center">
-        <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h2a2 2 0 002-2V7a2 2 0 00-2-2h-2m-4 14v-2m4 2v-2m-10 2H4A2 2 0 012 18V7a2 2 0 012-2h2m4 14V7m0 10h4m-4 4H9.5M4 7h16M7 7h10"></path></svg>
+        <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h2a2 2 0 002-2V7a2 2 0 00-2-2h-2m-4 14v-2m4 2v-2m-10 2H4A2 2 0 012 18V7a2 2 0 012-2h2m4 14V7m0 10h4m-4 4H9.5M4 7h16M7 7h10"></path></svg>
         길드
       </h2>
       <p className="text-gray-300 text-lg">길드 활동을 통해 다른 사용자와 협력하고 목표를 달성하세요!</p>
@@ -701,7 +701,7 @@ const AdventureScreen = ({ onBack }) => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-4 sm:p-8 font-inter flex flex-col items-center">
       <div className="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700 max-w-2xl w-full text-center mt-8">
         <h2 className="text-3xl font-bold mb-6 text-green-400 flex items-center justify-center">
-          <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.747 0-3.332.477-4.5 1.253"></path></svg>
+          <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.747 0-3.332.477-4.5 1.253"></path></svg>
           모험 시작
         </h2>
         <p className="text-gray-300 text-lg mb-6">새로운 모험을 시작하고 퀘스트를 완료하세요!</p>
@@ -777,7 +777,7 @@ const StatisticsSection = ({ onBack }) => (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-4 sm:p-8 font-inter flex flex-col items-center">
     <div className="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700 max-w-2xl w-full text-center mt-8">
       <h2 className="text-3xl font-bold mb-6 text-cyan-400 flex items-center justify-center">
-        <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+        <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
         통계
       </h2>
       <p className="text-gray-300 text-lg">여기에 사용자 통계 정보가 표시됩니다.</p>
@@ -795,7 +795,7 @@ const RankingSection = ({ onBack }) => (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-4 sm:p-8 font-inter flex flex-col items-center">
     <div className="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700 max-w-2xl w-full text-center mt-8">
       <h2 className="text-3xl font-bold mb-6 text-yellow-400 flex items-center justify-center">
-        <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.329 1.176l1.519 4.674c.3.921-.755 1.688-1.539 1.175l-4.915-3.181a1 1 0 00-1.176 0l-4.915 3.181c-.784.513-1.838-.254-1.539-1.175l1.519-4.674a1 1 0 00-.329-1.176l-3.976-2.888c-.784-.57-.381-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z"></path></svg>
+        <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.329 1.176l1.519 4.674c.3.921-.755 1.688-1.539 1.175l-4.915-3.181a1 1 0 00-1.176 0l-4.915 3.181c-.784.513-1.838-.254-1.539-1.175l1.519-4.674a1 1 0 00-.329-1.176l-3.976-2.888c-.784-.57-.381-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z"></path></svg>
         랭킹
       </h2>
       <p className="text-gray-300 text-lg">여기에 사용자 랭킹 정보가 표시됩니다.</p>
@@ -932,7 +932,7 @@ const DiarySection = ({ userId, db, onBack }) => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-4 sm:p-8 font-inter flex flex-col items-center">
       <div className="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700 max-w-4xl w-full text-center mt-8">
         <h2 className="text-3xl font-bold mb-6 text-purple-400 flex items-center justify-center">
-          <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
           다이어리
         </h2>
 
@@ -1450,7 +1450,7 @@ function App() {
         {/* 캐릭터 정보 카드 */}
         <div className="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700">
           <h2 className="text-2xl font-semibold mb-4 text-purple-400 flex items-center">
-            <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
             내 캐릭터
           </h2>
           {/* 아바타 표시 영역 - 클릭 시 꾸미기 화면으로 이동 */}
@@ -1499,7 +1499,7 @@ function App() {
             <div className="flex items-center">
               <span className="text-gray-400 w-24">골드:</span>
               <span className="font-bold text-lg text-yellow-500 flex items-center">
-                <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd"></path></svg>
+                <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd"></path></svg>
                 {character.gold}
               </span>
             </div>
@@ -1518,7 +1518,7 @@ function App() {
         {/* 새 작업 추가 카드 */}
         <div className="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700">
           <h2 className="text-2xl font-semibold mb-4 text-cyan-400 flex items-center">
-            <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             새로운 퀘스트 추가
           </h2>
           <div className="space-y-4">
@@ -1561,7 +1561,7 @@ function App() {
       {/* 현재 퀘스트 목록 */}
       <div className="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700 mt-8 max-w-6xl mx-auto w-full">
         <h2 className="text-2xl font-semibold mb-4 text-lime-400 flex items-center">
-          <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+          <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
           나의 퀘스트 목록
         </h2>
         {tasks.length === 0 ? (
@@ -1604,35 +1604,35 @@ function App() {
           onClick={() => setCurrentScreen('items')}
           className="flex flex-col items-center text-gray-300 hover:text-blue-400 transition duration-200 focus:outline-none"
         >
-          <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-4-2h8m-4 2v4"></path></svg>
+          <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-4-2h8m-4 2v4"></path></svg>
           <span className="text-xs">아이템</span>
         </button>
         <button
           onClick={() => setCurrentScreen('shop')}
           className="flex flex-col items-center text-gray-300 hover:text-yellow-400 transition duration-200 focus:outline-none"
         >
-          <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
           <span className="text-xs">상점가</span>
         </button>
         <button
           onClick={() => setCurrentScreen('guild')}
           className="flex flex-col items-center text-gray-300 hover:text-pink-400 transition duration-200 focus:outline-none"
         >
-          <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h2a2 2 0 002-2V7a2 2 0 00-2-2h-2m-4 14v-2m4 2v-2m-10 2H4A2 2 0 012 18V7a2 2 0 012-2h2m4 14V7m0 10h4m-4 4H9.5M4 7h16M7 7h10"></path></svg>
+          <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h2a2 2 0 002-2V7a2 2 0 00-2-2h-2m-4 14v-2m4 2v-2m-10 2H4A2 2 0 012 18V7a2 2 0 012-2h2m4 14V7m0 10h4m-4 4H9.5M4 7h16M7 7h10"></path></svg>
           <span className="text-xs">길드</span>
         </button>
         <button
           onClick={() => setCurrentScreen('adventure')}
           className="flex flex-col items-center text-gray-300 hover:text-green-400 transition duration-200 focus:outline-none"
         >
-          <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.747 0-3.332.477-4.5 1.253"></path></svg>
+          <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.747 0-3.332.477-4.5 1.253"></path></svg>
           <span className="text-xs">모험 시작</span>
         </button>
         <button
           onClick={() => setCurrentScreen('other')}
           className="flex flex-col items-center text-gray-300 hover:text-purple-400 transition duration-200 focus:outline-none"
         >
-          <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.568.35 1.253.542 1.96.542z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.568.35 1.253.542 1.96.542z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
           <span className="text-xs">기타</span>
         </button>
       </div>
