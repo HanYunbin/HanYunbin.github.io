@@ -75,10 +75,10 @@ const calculateDerivedStats = (character) => {
 
   // 플로우차트의 공식을 기반으로 단순화하여 적용
   const maxHealth = BASE_HEALTH + (health * 2) + (level * 10);
-  const maxMana = (intelligence * 5) + (level * 5); // MP는 현재 사용되지 않지만 추가
+  //const maxMana = (intelligence * 5) + (level * 5); // MP는 현재 사용되지 않지만 추가
   const attack = strength * 1.5 + level * 2;
   const defense = (health * 0.8) + (level * 1) + equippedDefense; // 방어력에 장착 아이템 방어력 추가
-  return { maxHealth, maxMana, attack, defense };
+  return { maxHealth, maxMana: 0, attack, defense };
 };
 
 // 아바타 파츠 데이터 (간단한 SVG로 표현)
@@ -1411,12 +1411,6 @@ function App() {
     }
   };
 
-  // 인벤토리에 아이템을 추가하는 함수 (테스트용 및 드롭용)
-  const addItemToInventory = async (itemToAdd) => {
-    if (!userId || !itemToAdd) {
-      console.log("아이템을 추가할 수 없습니다: 사용자 ID 또는 아이템이 유효하지 않습니다.");
-      return;
-    }
 
     const characterDocRef = doc(db, `artifacts/${appId}/users/${userId}/character/main`);
     const newItem = { ...itemToAdd, uniqueId: Date.now() + Math.random() }; // 고유 ID 추가
